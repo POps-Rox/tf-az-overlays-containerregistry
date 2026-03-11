@@ -5,7 +5,7 @@
 # Azure Region Lookup
 #----------------------------------------------------------
 module "mod_azure_region_lookup" {
-  source  = "azurenoops/overlays-azregions-lookup/azurerm"
+  source  = "github.com/POps-Rox/tf-az-overlays-azregionslookup"
   version = "~> 1.0.0"
 
   azure_region = "eastus"
@@ -14,7 +14,7 @@ module "mod_azure_region_lookup" {
 
 module "acr" {
   source = "../../"
-  #source  = ""azurenoops/overlays-container-registry/azurerm"
+  #source  = ""github.com/POps-Rox/tf-az-overlays-containerregistry"
   #version = "x.x.x"
 
   # By default, this module will create a resource group and 
