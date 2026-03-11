@@ -36,17 +36,17 @@ module "acr" {
   # The georeplications list cannot contain the location where the Container Registry exists.
   georeplications = [
     {
-      location                = "northeurope"
+      location                  = "northeurope"
       zone_redundancy_enabled   = true
       regional_endpoint_enabled = false
     },
     {
-      location                = "francecentral"
+      location                  = "francecentral"
       zone_redundancy_enabled   = true
       regional_endpoint_enabled = false
     },
     {
-      location                = "uksouth"
+      location                  = "uksouth"
       zone_redundancy_enabled   = true
       regional_endpoint_enabled = false
     }
