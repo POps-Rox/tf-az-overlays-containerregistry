@@ -37,15 +37,18 @@ module "acr" {
   georeplications = [
     {
       location                = "northeurope"
-      zone_redundancy_enabled = true
+      zone_redundancy_enabled   = true
+      regional_endpoint_enabled = false
     },
     {
       location                = "francecentral"
-      zone_redundancy_enabled = true
+      zone_redundancy_enabled   = true
+      regional_endpoint_enabled = false
     },
     {
       location                = "uksouth"
-      zone_redundancy_enabled = true
+      zone_redundancy_enabled   = true
+      regional_endpoint_enabled = false
     }
   ]
 
