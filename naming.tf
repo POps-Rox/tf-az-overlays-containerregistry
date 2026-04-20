@@ -1,4 +1,4 @@
-data "azurenoopsutils_resource_name" "acr" {
+data "popsrox_utils_resource_name" "acr" {
   name          = var.workload_name
   resource_type = "azurerm_container_registry"
   prefixes      = [var.org_name, module.mod_azure_region_lookup.location_short]

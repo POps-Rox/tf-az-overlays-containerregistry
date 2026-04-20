@@ -16,7 +16,7 @@ provider "azurerm" {
 # Azure Region Lookup
 #----------------------------------------------------------
 module "mod_azure_region_lookup" {
-  source  = "azurenoops/overlays-azregions-lookup/azurerm"
+  source  = "POps-Rox/overlays-azregions-lookup/azurerm"
   version = "~> 1.0.0"
 
   azure_region = "eastus"
@@ -27,7 +27,7 @@ module "acr" {
   depends_on = [
     azurerm_virtual_network.vnet
   ]
-  source  = ""azurenoops/overlays-container-registry/azurerm"
+  source  = "POps-Rox/overlays-container-registry/azurerm"
   version = "x.x.x"
 
   # By default, this module will not create a resource group. If you wish 
