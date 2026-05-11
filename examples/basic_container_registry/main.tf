@@ -5,7 +5,7 @@
 # Azure Region Lookup
 #----------------------------------------------------------
 module "mod_azure_region_lookup" {
-  source = "github.com/POps-Rox/tf-az-overlays-azregionslookup"
+  source = "github.com/POps-Rox/terraform-az-overlays-azregionslookup"
 
   azure_region = "eastus"
 }
@@ -13,7 +13,7 @@ module "mod_azure_region_lookup" {
 
 module "acr" {
   source = "../../"
-  #source  = ""github.com/POps-Rox/tf-az-overlays-containerregistry"
+  #source  = ""github.com/POps-Rox/terraform-az-overlays-containerregistry"
   #version = "x.x.x"
 
   # By default, this module will create a resource group and 
