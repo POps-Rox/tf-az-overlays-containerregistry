@@ -14,22 +14,11 @@ resource "azurerm_container_registry" "container_registry" {
 
   data_endpoint_enabled = var.data_endpoint_enabled
 
-  dynamic "retention_policy" {
-    for_each = var.images_retention_enabled && var.sku == "Premium" ? ["enabled"] : []
-
-    content {
-      enabled = var.images_retention_enabled
-      days    = var.images_retention_days
-    }
-  }
-
-  dynamic "trust_policy" {
-    for_each = var.trust_policy_enabled && var.sku == "Premium" ? ["enabled"] : []
-
-    content {
-      enabled = var.trust_policy_enabled
-    }
-  }
+  # `retention_policy` and `trust_policy` blocks on `azurerm_container_registry` were
+  # removed in azurerm 4.x (the underlying Azure ACR APIs were deprecated). The
+  # corresponding module variables (`images_retention_enabled`, `images_retention_days`,
+  # `retention_policy`, `trust_policy_enabled`, `enable_content_trust`) are retained for
+  # backward compatibility but are no longer wired to the resource.
 
   dynamic "georeplications" {
     for_each = var.georeplications != null && var.sku == "Premium" ? var.georeplications : []
@@ -55,43 +44,23 @@ resource "azurerm_container_registry" "container_registry" {
         }
       }
 
-      dynamic "virtual_network" {
-        for_each = network_rule_set.value.virtual_network
-        content {
-          action    = "Allow"
-          subnet_id = virtual_network.value.subnet_id
-        }
-      }
+      # NOTE: the `virtual_network` block inside `network_rule_set` was removed in azurerm 4.x
+      # (Azure deprecated VNet-based ACR firewall rules in favor of Private Endpoints).
+      # Any `virtual_network` entries in `var.network_rule_set` are silently ignored.
     }
   }
 
-  dynamic "retention_policy" {
-    for_each = var.retention_policy != null ? [var.retention_policy] : []
+  dynamic "encryption" {
+    for_each = var.encryption != null ? [var.encryption] : []
     content {
-      days    = lookup(retention_policy.value, "days", 7)
-      enabled = lookup(retention_policy.value, "enabled", true)
-    }
-  }
-
-  dynamic "trust_policy" {
-    for_each = var.enable_content_trust ? [1] : []
-    content {
-      enabled = var.enable_content_trust
+      key_vault_key_id   = encryption.value.key_vault_key_id
+      identity_client_id = encryption.value.identity_client_id
     }
   }
 
   identity {
     type         = var.identity_ids != null ? "SystemAssigned, UserAssigned" : "SystemAssigned"
     identity_ids = var.identity_ids
-  }
-
-  dynamic "encryption" {
-    for_each = var.encryption != null ? [var.encryption] : []
-    content {
-      enabled            = true
-      key_vault_key_id   = encryption.value.key_vault_key_id
-      identity_client_id = encryption.value.identity_client_id
-    }
   }
 
   tags = merge(local.default_tags, var.add_tags)

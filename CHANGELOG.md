@@ -1,5 +1,23 @@
 # Changelog
 
+## [v2.0.0] - 2026-05-11
+
+### Breaking changes
+
+* Upgraded to `azurerm` provider `~> 4.20`. Consumers must set `ARM_SUBSCRIPTION_ID` (azurerm 4.x makes `subscription_id` required for the `azurerm` provider).
+* Raised Terraform CLI floor from `>= 1.9` to `>= 1.10`.
+* Added `azure/azapi ~> 2.0` to `required_providers` for fleet alignment (not directly referenced today).
+* **`azurerm_container_registry.retention_policy` block removed.** azurerm 4.x dropped this block following Microsoft's deprecation of the ACR retention-policy API. The `var.images_retention_enabled`, `var.images_retention_days`, and `var.retention_policy` module inputs are retained for backward compatibility but **no longer affect the resource**. Configure retention via Azure Policy or external automation.
+* **`azurerm_container_registry.trust_policy` block removed.** azurerm 4.x dropped this block following Microsoft's deprecation of content trust in favor of Notary v2 / OCI image signing. The `var.trust_policy_enabled` and `var.enable_content_trust` module inputs are retained for backward compatibility but no longer affect the resource.
+* **`network_rule_set.virtual_network` block removed.** azurerm 4.x dropped VNet-based ACR firewall rules (replaced by Private Endpoints). Entries in `var.network_rule_set.virtual_network` are silently ignored. Use the existing `enable_private_endpoint = true` path for private connectivity.
+* **`azurerm_container_registry.encryption.enabled` attribute removed.** azurerm 4.x infers enablement from the presence of the `encryption` block; supplying `enabled = true` is no longer accepted.
+
+### Notes
+
+* `popsrox` local provider name retained (renaming would invalidate all `popsrox_resource_name` data sources used downstream).
+* All three examples updated to pin the new provider constraints. The `basic_container_registry_with_private_endpoint` example retains its `retention_policy = {...}` and `enable_content_trust = true` inputs with a comment documenting that they are no-ops post-4.x.
+
+
 ## [Unreleased](https://github.com/Azure/terraform-verified-module/tree/HEAD)
 
 **Merged pull requests:**
