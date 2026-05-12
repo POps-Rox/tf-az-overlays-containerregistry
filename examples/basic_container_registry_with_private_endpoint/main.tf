@@ -31,9 +31,11 @@ module "acr" {
   workload_name                = "dev-acr"
   sku                          = "Premium"
 
-  # Set a retention policy with care--deleted image data is UNRECOVERABLE.
-  # A retention policy for untagged manifests is currently a preview feature of Premium container registries
-  # The retention policy applies only to untagged manifests with timestamps after the policy is enabled. Default is `7` days.
+  # NOTE: `retention_policy` and `enable_content_trust` are no-ops in azurerm 4.x —
+  # the underlying ACR retention/trust policy APIs were removed by Azure and the
+  # corresponding resource blocks were dropped from the provider. The module accepts
+  # these inputs for backward compatibility but does not pass them to the resource.
+  # Configure retention and image signing via Azure Policy / Notary v2 outside Terraform.
   retention_policy = {
     days    = 10
     enabled = true
